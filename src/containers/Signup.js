@@ -40,21 +40,23 @@ export default class Signup extends Component {
 	handleSubmit = async event => {
 		event.preventDefault();
 
-		this.setState({ isLoading: true });
-
-		try {
-			const newUser = await Auth.signUp({
+		this.setState({ isLoading: true }, () => {
+			Auth.signUp({
 				username: this.state.email,
 				password: this.state.password
-			});
-			this.setState({
-				newUser
-			});
-		} catch (e) {
-			alert(e.message);
-		}
-
-		this.setState({ isLoading: false });
+			})
+			.then(newUser => {
+				this.setState({
+					newUser
+				});
+			})
+			.catch(e => {
+				alert(e.message);
+			})
+			.then(() => {
+				this.setState({ isLoading: false });
+			})
+		});
 	};
 
 	handleConfirmationSubmit = async event => {
